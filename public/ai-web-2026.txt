@@ -1,0 +1,20 @@
+mainor-assignment=ai-web-2026
+team-slug-env=TEAM_SLUG
+student-name-env=VITE_STUDENT_NAME
+stack=react-vite-supabase-netlify
+netlify-functions-path=/.netlify/functions/*
+static-route=/ai-web-2026.txt
+
+required-env-vars:
+- VITE_SUPABASE_URL
+- VITE_SUPABASE_ANON_KEY
+- VITE_TEAM_SLUG
+- VITE_STUDENT_NAME
+- SUPABASE_URL
+- SUPABASE_ANON_KEY
+- SUPABASE_SERVICE_ROLE_KEY
+- RESEND_API_KEY
+- NOTIFY_EMAIL_TO
+- TEAM_SLUG
+
+note=No secrets are stored in this file.
