@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { z } from 'zod';
-import { envConfig, supabase } from '@/lib/supabase';
+import { envConfig, publicSupabase } from '@/lib/supabase';
 import { BlockRow, Json, loadPublicSiteData, normalizeLanguageList } from '@/lib/cms-data';
 
 const spacingClass: Record<string, string> = {
@@ -118,7 +118,7 @@ const ContactForm = ({
     setErrors({});
     try {
       let inquiryId = '';
-      const { data, error } = await supabase
+      const { data, error } = await publicSupabase
         .from('inquiries')
         .insert({
           site_id: siteId,

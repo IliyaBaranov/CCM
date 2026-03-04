@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase';
+import { publicSupabase, supabase } from '@/lib/supabase';
 
 export type Json = string | number | boolean | null | { [key: string]: Json } | Json[];
 export type Role = 'Superadmin' | 'Admin' | 'Editor' | '';
@@ -97,7 +97,7 @@ export const getLocalizedField = <T = string>(source: Json, lang: string, fallba
 export const parseJsonObject = (value: string) => JSON.parse(value) as Record<string, unknown>;
 
 export const loadSiteByTeamSlug = async (teamSlug: string) => {
-  const { data: team, error: teamError } = await supabase
+  const { data: team, error: teamError } = await publicSupabase
     .from('teams')
     .select('id, team_slug')
     .eq('team_slug', teamSlug)
@@ -106,7 +106,7 @@ export const loadSiteByTeamSlug = async (teamSlug: string) => {
   if (!team) throw new Error(`Team not found for slug: ${teamSlug}`);
   const teamRow = team as TeamRow;
 
-  const { data: site, error: siteError } = await supabase
+  const { data: site, error: siteError } = await publicSupabase
     .from('sites')
     .select('*')
     .eq('team_id', teamRow.id)
@@ -120,7 +120,7 @@ export const loadSiteByTeamSlug = async (teamSlug: string) => {
 
 export const loadPublicSiteData = async (teamSlug: string) => {
   const { team, site } = await loadSiteByTeamSlug(teamSlug);
-  const { data: page, error: pageError } = await supabase
+  const { data: page, error: pageError } = await publicSupabase
     .from('pages')
     .select('*')
     .eq('site_id', site.id)
@@ -131,10 +131,10 @@ export const loadPublicSiteData = async (teamSlug: string) => {
   const pageRow = page as PageRow;
 
   const [blocksResponse, menuResponse, formResponse, seoResponse] = await Promise.all([
-    supabase.from('blocks').select('*').eq('page_id', pageRow.id).order('order_index', { ascending: true }),
-    supabase.from('menus').select('*').eq('site_id', site.id).maybeSingle(),
-    supabase.from('forms').select('*').eq('site_id', site.id).eq('key', 'contact').maybeSingle(),
-    supabase.from('seo').select('*').eq('site_id', site.id).eq('slug', 'home').maybeSingle(),
+    publicSupabase.from('blocks').select('*').eq('page_id', pageRow.id).order('order_index', { ascending: true }),
+    publicSupabase.from('menus').select('*').eq('site_id', site.id).maybeSingle(),
+    publicSupabase.from('forms').select('*').eq('site_id', site.id).eq('key', 'contact').maybeSingle(),
+    publicSupabase.from('seo').select('*').eq('site_id', site.id).eq('slug', 'home').maybeSingle(),
   ]);
 
   if (blocksResponse.error) throw blocksResponse.error;

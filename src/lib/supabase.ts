@@ -15,6 +15,14 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   },
 });
 
+export const publicSupabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    persistSession: false,
+    autoRefreshToken: false,
+    detectSessionInUrl: false,
+  },
+});
+
 export const envConfig = {
   teamSlug: import.meta.env.VITE_TEAM_SLUG || 'default',
   studentName: import.meta.env.VITE_STUDENT_NAME || 'Unknown',
