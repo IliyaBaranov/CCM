@@ -117,19 +117,17 @@ const ContactForm = ({
     setSubmitting(true);
     setErrors({});
     try {
-      let inquiryId = '';
-      const { data, error } = await publicSupabase
+      const inquiryId = crypto.randomUUID();
+      const { error } = await publicSupabase
         .from('inquiries')
         .insert({
+          id: inquiryId,
           site_id: siteId,
           team_slug: teamSlug,
           source: 'ai-web-2026',
           data: parsed.data,
-        })
-        .select('id')
-        .single();
+        });
       if (error) throw error;
-      inquiryId = String(data.id);
 
       const emailResponse = await fetch('/.netlify/functions/send-inquiry-email', {
         method: 'POST',
